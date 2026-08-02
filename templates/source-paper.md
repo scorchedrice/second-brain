@@ -2,7 +2,7 @@
 type: source
 source_type: paper
 status: unread
-ingestion_status: complete
+ingestion_status: partial
 created: {{date}}
 updated: {{date}}
 aliases: []

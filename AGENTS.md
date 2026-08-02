@@ -75,6 +75,8 @@ transcript만 확인했으면 `coverage: transcript-only`를 사용하고 화면
 
 URL만 주어지면 Register ingest까지만 수행한다. 학습 요청이 있으면 Study and query를 이어간다. 사용자가 이해 및 정식 반영을 선언한 경우에만 Knowledge ingest를 수행한다.
 
+새 Source의 `ingestion_status` 기본값은 `partial`이다. 필요한 본문, metadata, 인용 위치와 capture 범위를 확인한 뒤에만 `complete`로 바꾼다.
+
 ## Study and query
 
 index에서 관련 노드를 찾고 Wiki와 Raw source를 함께 읽어 답한다. 답에는 주장 단위 provenance를 제공한다. 사용자의 의미 있는 생각이나 질문을 보존할 때는 원문을 새 timestamped `raw/notes/` 파일로 먼저 만들고 Thought 또는 Question으로 구조화한다. 기존 Raw note에 append하지 않는다.

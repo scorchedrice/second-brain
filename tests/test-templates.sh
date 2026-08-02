@@ -12,6 +12,10 @@ for name in source-paper source-web source-youtube; do
   for field in type source_type status ingestion_status created updated raw_source sources related; do
     grep -Eq "^${field}:" "$file" || { printf '%s missing %s\n' "$name" "$field" >&2; exit 1; }
   done
+  grep -Fq 'ingestion_status: partial' "$file" || {
+    printf '%s must default to partial ingestion\n' "$name" >&2
+    exit 1
+  }
 done
 
 grep -Fq 'source_type: web' "$ROOT/templates/source-web.md"

@@ -2,7 +2,7 @@
 type: source
 source_type: youtube
 status: unread
-ingestion_status: complete
+ingestion_status: partial
 coverage: transcript-only
 created: {{date}}
 updated: {{date}}

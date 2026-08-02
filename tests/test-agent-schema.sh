@@ -18,6 +18,7 @@ required=(
   '## Raw safety'
   '## Git and reporting'
   'transcript-only'
+  '기본값은 `partial`'
   'unread -> learning -> understood -> integrated'
   '사용자의 명시적 선언'
 )
