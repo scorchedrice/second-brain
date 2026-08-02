@@ -22,6 +22,20 @@ frontmatter_value() {
   '
 }
 
+frontmatter_list_items() {
+  local file="$1"
+  local key="$2"
+  sed -n '2,/^---$/p' "$file" | awk -v key="$key" '
+    $0 == key ":" { in_list = 1; next }
+    in_list && /^[^[:space:]]/ { exit }
+    in_list && /^[[:space:]]*-[[:space:]]*/ {
+      sub(/^[[:space:]]*-[[:space:]]*/, "", $0)
+      gsub(/^"|"$/, "", $0)
+      print
+    }
+  '
+}
+
 require_field() {
   local file="$1"
   local key="$2"
@@ -34,11 +48,13 @@ required_paths=(
   raw/sources/papers
   raw/sources/web
   raw/sources/youtube
+  raw/sources/courses
   raw/notes
   raw/assets
   wiki/sources/papers
   wiki/sources/web
   wiki/sources/youtube
+  wiki/sources/courses
   wiki/concepts
   wiki/thoughts
   wiki/questions
@@ -84,16 +100,61 @@ if [[ -d "$ROOT/wiki" ]]; then
       source)
         require_field "$file" source_type
         require_field "$file" ingestion_status
-        require_field "$file" raw_source
         source_type="$(frontmatter_value "$file" source_type)"
         expected_source_type=''
         case "$rel" in
           wiki/sources/papers/*) expected_source_type='paper' ;;
           wiki/sources/web/*) expected_source_type='web' ;;
           wiki/sources/youtube/*) expected_source_type='youtube' ;;
+          wiki/sources/courses/*) expected_source_type='course' ;;
         esac
         if [[ -n "$expected_source_type" && "$source_type" != "$expected_source_type" ]]; then
           error "$rel: source_type '$source_type' does not match folder '$expected_source_type'"
+        fi
+        if [[ "$source_type" == 'course' ]]; then
+          require_field "$file" formats
+          require_field "$file" raw_sources
+
+          format_count=0
+          format_pptx=0
+          format_pdf=0
+          while IFS= read -r format; do
+            [[ -z "$format" ]] && continue
+            format_count=$((format_count + 1))
+            case "$format" in
+              pptx) format_pptx=1 ;;
+              pdf) format_pdf=1 ;;
+              *) error "$rel: unsupported course format '$format'" ;;
+            esac
+          done < <(frontmatter_list_items "$file" formats)
+
+          raw_count=0
+          raw_pptx=0
+          raw_pdf=0
+          while IFS= read -r raw_link; do
+            [[ -z "$raw_link" ]] && continue
+            raw_count=$((raw_count + 1))
+            target="${raw_link#\[\[}"
+            target="${target%\]\]}"
+            target="${target%%|*}"
+            case "$target" in
+              raw/sources/courses/*.pptx) raw_pptx=1 ;;
+              raw/sources/courses/*.pdf) raw_pdf=1 ;;
+              *) error "$rel: invalid course raw source '$target'" ;;
+            esac
+          done < <(frontmatter_list_items "$file" raw_sources)
+
+          if [[ "$format_count" -eq 0 ]]; then
+            error "$rel: formats must contain at least one item"
+          fi
+          if [[ "$raw_count" -eq 0 ]]; then
+            error "$rel: raw_sources must contain at least one item"
+          fi
+          if [[ "$format_pptx" -ne "$raw_pptx" || "$format_pdf" -ne "$raw_pdf" ]]; then
+            error "$rel: course formats do not match raw_sources extensions"
+          fi
+        else
+          require_field "$file" raw_source
         fi
         case "$actual_status" in
           unread|learning|understood|integrated|revisit) ;;
