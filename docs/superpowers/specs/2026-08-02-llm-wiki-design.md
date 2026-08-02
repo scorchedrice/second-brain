@@ -66,6 +66,8 @@ second-brain/
 
 각 Markdown 페이지는 그래프의 노드이고 Obsidian wikilink는 엣지다. YAML frontmatter에는 관계의 의미를 기록하고 본문에는 사람이 따라갈 수 있는 문맥 있는 링크를 둔다.
 
+LLM이 생성하는 wikilink는 이름 충돌을 피하기 위해 확장자를 제외한 vault-relative path를 사용한다. 화면에 표시할 이름이 필요하면 `[[wiki/concepts/Self-Attention|Self-Attention]]`처럼 alias를 붙인다.
+
 ### 4.1 노드 유형
 
 - `source`: 자료의 실제 내용과 학습 상태를 추적하는 근거 노드. `source_type`으로 `paper`, `web`, `youtube`를 구분한다.
@@ -83,7 +85,7 @@ Raw 파일은 원본 노드로 취급하되 LLM 생성 metadata를 원본 파일
 - `challenges`: 대상과 충돌하거나 적용 범위를 제한한다.
 - `extends`: 기존 지식이나 방법을 확장한다.
 - `uses`: 방법, 데이터셋, 모델 또는 도구를 사용한다.
-- `derived-from`: 사용자 생각이나 분석이 어떤 근거에서 출발했는지 나타낸다.
+- `derived_from`: 사용자 생각이나 분석이 어떤 근거에서 출발했는지 나타낸다.
 - `about`: 페이지가 다루는 중심 대상을 나타낸다.
 - `requires`: 이해에 필요한 선행 개념을 나타낸다.
 - `motivates`: 질문, 가설 또는 후속 연구 방향을 유발한다.
@@ -96,7 +98,7 @@ Raw 파일은 원본 노드로 취급하되 LLM 생성 metadata를 원본 파일
 - 모든 Source 페이지는 정확한 Raw 원본 또는 immutable capture를 참조한다.
 - Concept의 주요 사실 주장은 하나 이상의 통합된 근거를 가진다.
 - `unread` 또는 `learning` Source는 확정된 Concept 주장의 근거가 될 수 없다.
-- 모든 Thought는 `derived-from` 또는 `about` 관계를 가진다.
+- 모든 Thought는 `derived_from` 또는 `about` 관계를 가진다.
 - 모든 Question은 관련 Source, Concept 또는 Thought와 연결된다.
 - 새 Wiki 페이지는 `index.md`에 등록되고 적어도 하나의 기존 노드와 연결된다. 최초 seed 페이지는 예외로 한다.
 - 의미상 양방향인 관계는 관련 페이지 양쪽에 탐색 가능한 링크를 둔다.
@@ -169,6 +171,8 @@ Source의 학습 상태는 다음과 같다.
 - `revisit`: 이전 이해를 다시 검토해야 한다.
 
 `understood` 전이는 사용자 선언으로만 발생한다. LLM은 대화 길이, 질문 수 또는 답변 정확도를 근거로 이해 완료를 추정하지 않는다.
+
+Concept 상태는 `draft`, `integrated`, `revisit`, `deprecated`를 사용한다. `draft`는 아직 확정 근거가 부족한 초안, `integrated`는 현재 근거를 반영한 정식 지식, `revisit`는 재검토가 필요한 지식, `deprecated`는 더 정확한 Concept으로 대체되어 이력만 보존하는 상태다.
 
 Thought 상태는 `proposed`, `testing`, `supported`, `weakened`, `refuted`, `superseded`를 사용한다. Question 상태는 `open`, `answered`, `misframed`, `superseded`를 사용한다.
 
