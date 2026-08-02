@@ -4,7 +4,7 @@
 
 ## 빠른 시작
 
-1. 논문 파일을 `raw/sources/papers/`에 넣거나 대화에 Web·YouTube URL을 제공한다.
+1. 논문 파일은 `raw/sources/papers/`, PPTX와 PDF 수업자료는 `raw/sources/courses/`에 넣거나 대화에 Web·YouTube URL을 제공한다.
 2. Codex에 자료 등록 또는 학습을 요청한다.
 3. 질문과 자신의 생각을 함께 제공한다.
 4. 이해가 끝났을 때만 “이 자료를 이해했어. 정식 반영해줘”라고 요청한다.
@@ -35,6 +35,17 @@ raw/sources/papers/example.pdf를 register ingest 해줘.
 ```
 
 metadata와 timestamped transcript를 `raw/sources/youtube/`에 보존한다. transcript만 확인했으면 화면 속 code나 diagram을 확인한 것처럼 기록하지 않는다.
+
+## 수업자료 등록
+
+PPTX와 PDF 수업자료는 `raw/sources/courses/`에 직접 넣는다.
+
+```text
+raw/sources/courses/0. INTRO.pptx를 register ingest하고 학습을 시작해줘.
+아직 정식 지식으로 통합하지 말고 전체 지도와 선행 개념부터 설명해줘.
+```
+
+같은 내용을 담은 PPTX와 PDF는 한 Course Source의 format variant로 연결한다. PPTX는 slide와 speaker notes, PDF는 page를 확인하며, 읽지 못한 animation이나 embedded media가 있으면 `partial` 상태와 범위를 기록한다.
 
 ## 학습과 질문
 

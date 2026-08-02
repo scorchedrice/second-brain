@@ -19,7 +19,7 @@ Wiki 작업을 시작할 때 `wiki/index.md`와 `wiki/log.md`의 최근 항목�
 ## Page and link rules
 
 - 노드 타입은 `source`, `concept`, `thought`, `question`이다.
-- Source subtype은 `paper`, `web`, `youtube`다.
+- Source subtype은 `paper`, `web`, `youtube`, `course`다.
 - wikilink는 확장자를 제외한 vault-relative path를 사용한다. 표시명은 alias로 붙인다.
 - 모든 새 Wiki 노드는 `wiki/index.md`에 상태와 한 줄 설명으로 등록한다.
 - 모든 새 노드는 최소 하나의 기존 노드와 연결한다. 최초 seed는 예외다.
@@ -65,6 +65,14 @@ Source의 `understood` 전이는 사용자의 명시적 선언으로만 수행�
 5. 사전 분석은 `[LLM analysis]`로 표시하고 Concept의 확정 지식은 바꾸지 않는다.
 6. index와 log를 갱신하고 구조 lint를 실행한다.
 
+## Local course ingest
+
+PPTX와 PDF 수업자료는 `raw/sources/courses/`에서 duplicate와 format variant를 확인한다. 같은 내용을 담은 PPTX와 PDF는 Course Source 하나의 `raw_sources`에 연결하고, 내용이 다르면 별도 Source로 등록한다. 파일명만 같다는 이유로 자동 병합하지 않는다.
+
+PPTX는 모든 slide, speaker notes와 학습에 필요한 figure, diagram을 확인한다. PDF는 모든 page를 확인한다. 인용 위치는 PPTX의 `slide N`, PDF의 `p. N`으로 구분한다. animation, embedded media, 손상된 수식 또는 읽을 수 없는 시각 자료가 있으면 실패 범위와 필요한 사용자 입력을 기록하고 `ingestion_status: partial`을 유지한다.
+
+Course Source의 지원 형식은 `pptx`, `pdf`다. 새 형식은 반복 수요와 추출·인용 규칙이 확인된 뒤 schema 변경으로 추가한다.
+
 ## URL capture
 
 Web URL은 canonical URL로, YouTube는 video ID로 duplicate를 확인한다. Web은 readable Markdown snapshot, metadata, accessed date와 필요한 local asset을 저장한다. YouTube는 metadata, chapter와 timestamp가 있는 transcript를 저장한다. capture는 생성 후 immutable이다.
@@ -109,6 +117,7 @@ index에서 관련 노드를 찾고 Wiki와 Raw source를 함께 읽어 답한�
 - 고아, 중복, 비대칭 관계와 상충 표시 누락
 - 오래된 Concept 및 장기 unread, learning, revisit 상태
 - local capture, accessed date, timestamp와 coverage 누락
+- Course Source의 format, Raw 확장자, slide/page 인용 위치와 coverage 불일치
 
 링크·색인처럼 의미가 변하지 않는 오류는 수정할 수 있다. 확실성, 주장 또는 관계의 의미가 바뀌는 수정은 사용자에게 보고하고 승인받는다.
 
@@ -119,6 +128,7 @@ index에서 관련 노드를 찾고 Wiki와 Raw source를 함께 읽어 답한�
 - 사용자 원문은 맞춤법까지 verbatim으로 새 파일에 저장한다.
 - Web과 YouTube capture에는 canonical URL과 accessed date를 기록한다.
 - 새 revision은 별도 Raw 파일로 보존한다.
+- 같은 수업자료의 format variant와 새 revision도 각각 별도 Raw 파일로 보존한다.
 
 ## Git and reporting
 

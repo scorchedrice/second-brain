@@ -15,6 +15,10 @@ required=(
   '## Lint'
   'bash scripts/lint-wiki.sh'
   '정식 반영해줘'
+  '## 수업자료 등록'
+  'raw/sources/courses/'
+  'PPTX와 PDF'
+  '같은 내용을 담은'
 )
 
 for token in "${required[@]}"; do

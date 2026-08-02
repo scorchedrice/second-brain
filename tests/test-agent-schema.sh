@@ -21,6 +21,11 @@ required=(
   '기본값은 `partial`'
   'unread -> learning -> understood -> integrated'
   '사용자의 명시적 선언'
+  'Source subtype은 `paper`, `web`, `youtube`, `course`다.'
+  '## Local course ingest'
+  'raw/sources/courses/'
+  'slide N'
+  'speaker notes'
 )
 
 for token in "${required[@]}"; do
