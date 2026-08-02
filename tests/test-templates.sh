@@ -7,6 +7,23 @@ for name in source-paper source-web source-youtube raw-web raw-youtube raw-note 
   [[ -f "$ROOT/templates/$name.md" ]] || { printf 'missing template: %s\n' "$name" >&2; exit 1; }
 done
 
+[[ -f "$ROOT/templates/source-course.md" ]] || {
+  printf 'missing template: source-course\n' >&2
+  exit 1
+}
+
+course_template="$ROOT/templates/source-course.md"
+for field in type source_type status ingestion_status created updated formats raw_sources sources related; do
+  grep -Eq "^${field}:" "$course_template" || {
+    printf 'source-course missing %s\n' "$field" >&2
+    exit 1
+  }
+done
+grep -Fq 'source_type: course' "$course_template"
+grep -Fq 'ingestion_status: partial' "$course_template"
+grep -Fq '## Source files and coverage' "$course_template"
+grep -Fq '## Equations and methods' "$course_template"
+
 for name in source-paper source-web source-youtube; do
   file="$ROOT/templates/$name.md"
   for field in type source_type status ingestion_status created updated raw_source sources related; do

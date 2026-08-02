@@ -16,6 +16,8 @@ Query와 ingest를 시작할 때 먼저 읽는 지식 지도다. 새 Wiki 페이
 
 ### YouTube
 
+### Courses
+
 ## Concepts
 
 ## Thoughts

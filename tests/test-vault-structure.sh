@@ -4,9 +4,9 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 
 required_dirs=(
-  raw/sources/papers raw/sources/web raw/sources/youtube
+  raw/sources/papers raw/sources/web raw/sources/youtube raw/sources/courses
   raw/notes raw/assets
-  wiki/sources/papers wiki/sources/web wiki/sources/youtube
+  wiki/sources/papers wiki/sources/web wiki/sources/youtube wiki/sources/courses
   wiki/concepts wiki/thoughts wiki/questions
 )
 
@@ -16,6 +16,7 @@ done
 
 grep -Fq '# LLM Wiki Index' "$ROOT/wiki/index.md"
 grep -Fq '## Sources' "$ROOT/wiki/index.md"
+grep -Fq '### Courses' "$ROOT/wiki/index.md"
 grep -Fq '## Concepts' "$ROOT/wiki/index.md"
 grep -Fq '## Thoughts' "$ROOT/wiki/index.md"
 grep -Fq '## Questions' "$ROOT/wiki/index.md"
